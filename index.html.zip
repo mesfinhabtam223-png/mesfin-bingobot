@@ -1,0 +1,35 @@
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+
+# ሎጊንግ ማስተካከል
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
+# /start ትዕዛዝ ሲጻፍ የሚሰጠው ምላሽ
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_name = update.effective_user.first_name
+    await update.message.reply_text(
+        f"ሰላም {user_name}! ወደ ቢንጎ ጨዋታ ቦት እንኳን በደህና መጡ። ጨዋታውን ለመጀመር /play የሚለውን ይጫኑ!"
+    )
+
+# /play ትዕዛዝ ሲጻፍ የሚሰጠው ምላሽ
+async def play(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🎮 የቢንጎ ካርድዎ እየተዘጋጀ ነው... (እዚህ ጋር የጨዋታውን ሕግጋት እና ካርድ ማماlክ ይቻላል)"
+    )
+
+if __name__ == '__main__':
+    # ቶከንዎን እዚህ ጋር ያስገቡ (በምስሉ ላይ የነበረውን API Token)
+    TOKEN = "YOUR_BOT_API_TOKEN_HERE"
+    
+    app = ApplicationBuilder().token(TOKEN).build()
+
+    # ትዕዛዞቹን ማስመዝገብ
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("play", play))
+
+    print("ቦቱ በመሥራት ላይ ነው...")
+    app.run_polling()
